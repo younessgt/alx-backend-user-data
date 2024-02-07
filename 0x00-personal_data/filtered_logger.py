@@ -64,7 +64,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
             'database': db_name,
             'port': 3306
     }
-    connection = mysql.connector.connect(**config)
+    connection = mysql.connector.connection.MySQLConnection(**config)
     return connection
 
 
