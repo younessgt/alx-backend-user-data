@@ -5,13 +5,14 @@ import re
 import logging
 import mysql.connector
 import os
+
 PII_FIELDS = ("email", "phone", "ssn", "password", "name")
 
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """ returning the log message obfuscated"""
-    pattern = rf"({'|'.join(fields)})=([^ {separator},\s]+)"
+    pattern = rf"({'|'.join(fields)})=([^{separator},]+)"
     new_message = re.sub(pattern, rf"\1={redaction}", message)
     return new_message
 
@@ -65,3 +66,24 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     connection = mysql.connector.connection.MySQLConnection(**config)
     # the connection is closed in the 3-main.py file
     return connection
+
+
+def main():
+
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+
+    logger = get_logger()
+
+    for row in cursor:
+        name, email, phone, ssn, password, ip, last_login, user_agent = row
+        message = f"name={name};email={email};"\
+                  f"phone={phone};ssn={ssn};ip={ip};"\
+                  f"password={password};last_login={last_login};"\
+                  f"user_agent={user_agent}"
+        logger.info(message)
+
+
+if __name__ == "__main__":
+    main()
