@@ -61,10 +61,10 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
             'user': username,
             'password': password,
             'host': host,
-            'database': db_name
+            'database': db_name,
+            'port': 3306
     }
-    connection = mysql.connector.connection.MySQLConnection(**config)
-    # the connection is closed in the 3-main.py file
+    connection = mysql.connector.connect(**config)
     return connection
 
 
