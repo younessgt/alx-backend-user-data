@@ -83,6 +83,8 @@ def main():
                   f"password={password};last_login={last_login};"\
                   f"user_agent={user_agent}"
         logger.info(message)
+    cursor.close()
+    db.close()
 
 
 if __name__ == "__main__":
