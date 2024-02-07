@@ -56,12 +56,15 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = os.environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
 
-    config = {
-            'user': username,
-            'password': password,
-            'host': host,
-            'database': db_name
-    }
-    connection = mysql.connector.connection.MySQLConnection(**config)
+    # config = {
+    # 'user': username,
+    # 'password': password,
+    # 'host': host,
+    # 'database': db_name
+    # }
+    connection = mysql.connector.connection.MySQLConnection(user=username,
+                                                            password=password,
+                                                            host=host,
+                                                            database=db_name)
     return connection
     # the connection is closed in the 3-main.py file
