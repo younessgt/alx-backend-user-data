@@ -12,7 +12,7 @@ PII_FIELDS = ("email", "phone", "ssn", "password", "name")
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """ returning the log message obfuscated"""
-    pattern = rf"({'|'.join(fields)})=([^{separator},]+)"
+    pattern = rf"({'|'.join(fields)})=([^ {separator},\s]+)"
     new_message = re.sub(pattern, rf"\1={redaction}", message)
     return new_message
 
