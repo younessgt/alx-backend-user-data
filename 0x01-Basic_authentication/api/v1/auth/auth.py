@@ -3,6 +3,7 @@
 
 from flask import request
 from typing import List, TypeVar
+from fnmatch import fnmatch, fnmatchcase
 
 
 class Auth:
@@ -16,6 +17,9 @@ class Auth:
             path += "/"
         if path in excluded_paths:
             return False
+        for p in excluded_paths:
+            if fnmatch(path, p):
+                return False
         return True
 
     def authorization_header(self, request=None) -> str:
