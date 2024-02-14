@@ -18,9 +18,12 @@ AUTH = getenv("AUTH_TYPE")
 if AUTH == "auth":
     from api.v1.auth.auth import Auth
     auth = Auth()
-elif AUTH == "basic_auth":
+if AUTH == "basic_auth":
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
+if AUTH == "session_auth":
+    from api.v1.auth.session_auth import SessionAuth
+    auth = SessionAuth()
 
 
 @app.errorhandler(404)
@@ -45,13 +48,19 @@ def no_access_allowed(error) -> str:
 @app.before_request
 def filter_request():
     """ filtering requests"""
-    paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    paths = ['/api/v1/status/', '/api/v1/unauthorized/',
+             '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+
     if auth is None:
         return
     if not auth.require_auth(request.path, paths):
         return
-    if auth.authorization_header(request) is None:
+    if (
+        auth.authorization_header(request) is None and
+        auth.session_cookie(request) is None
+       ):
         return abort(401)
+
     # it better to use g variable from flask to store somthing like
     # current_user  g.current_user  instead of request.current_user
     request.current_user = auth.current_user(request)

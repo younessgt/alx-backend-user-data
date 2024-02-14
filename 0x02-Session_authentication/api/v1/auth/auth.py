@@ -4,6 +4,7 @@
 from flask import request
 from typing import List, TypeVar
 from fnmatch import fnmatch, fnmatchcase
+from os import getenv, getenvb
 
 
 class Auth:
@@ -31,3 +32,12 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """documentation needed"""
         return None
+
+    def session_cookie(self, request=None):
+        """ method that return a cookie value from a rquest"""
+
+        if request is None:
+            return None
+        session_name = getenv("SESSION_NAME")
+        value = request.cookies.get(session_name)
+        return value
