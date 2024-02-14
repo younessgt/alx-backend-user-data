@@ -2,13 +2,13 @@
 """module of session views"""
 
 from api.v1.views import app_views
-from flask import request, jsonify
+from flask import abort, request, jsonify
 from models.user import User
 from os import getenv
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def session():
+def session_login():
     """doc doc doc"""
 
     email = request.form.get("email")
@@ -35,3 +35,16 @@ def session():
             res.set_cookie(session_name, new_session_id)
             return res
     return jsonify({"error": "wrong password"}), 401
+
+
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'],
+                 strict_slashes=False)
+def session_logout():
+    """DOC DOC DOC"""
+
+    from api.v1.app import auth
+    resp = auth.destroy_session(request)
+    if resp:
+        return jsonify({""}), 200
+    abort(404)
