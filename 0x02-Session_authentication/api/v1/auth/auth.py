@@ -3,8 +3,8 @@
 
 from flask import request
 from typing import List, TypeVar
-from fnmatch import fnmatch, fnmatchcase
-from os import getenv, getenvb
+from fnmatch import fnmatch
+from os import getenv
 
 
 class Auth:
